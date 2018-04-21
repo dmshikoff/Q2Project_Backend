@@ -1,0 +1,9 @@
+[
+    "Land",
+    "Creature",
+    "Artifact",
+    "Enchantment",
+    "Planeswalker",
+    "Instant",
+    "Sorcery"
+]
