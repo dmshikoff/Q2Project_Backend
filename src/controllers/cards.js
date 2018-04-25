@@ -10,9 +10,10 @@ function getAll(req, res, next) {
 }
 
 function create(req, res, next) {
-    cardsModel.create(req.body)
+    
+    cardsModel.create(req.body, req.params.userId)
         .then(data => {
-            res.status(200).send(data)
+            res.status(200).send({data})
         })
         .catch(next)
 }

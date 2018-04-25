@@ -38,34 +38,92 @@ function getAll(query = {}) {
     }
 }
 
-function create(body){
+function create(cards, userId) {
     // strip away extra info
-let cardsWithId
+    let cardsWithId
+    let myDBCards
 
-db('types').then(function(type){
-  cardsWithId = cards.map(card => {
-    const foundTypeId = types.find(type => type.name === card.type)
-    return { ...card, type: foundTypeId }
-  })
-  return db('subtypes')
-})
-then(function(subtypes){
-  // append array with
-  cardsWithId = cardsWithId.map(card => {
-    const foundSubtypeId = subtypes.find(subtype => subtype.name === card.subtype)
-    console.log(foundSubtypeId)
-    return { ...card, subtype: foundSubtypeId }
-  })
+    return db('types').then(function (types) {
+        cardsWithId = cards.map(card => {
+            let idArray = card.type.map(cardType => {
+                const foundTypeId = types.find(type => type.name === cardType)
+                return foundTypeId.id
+            })
+            return { ...card, type: idArray }
+        })
+        return db('subtypes')
+    })
+        .then(function (subtypes) {
+            // append array with
+            cardsWithId = cardsWithId.map(card => {
+                 if (card.subtype.length !== 0){
+                    let idArray = card.subtype.map(cardSubtype => {
 
-  const clean = cardsWithId.map(card => {
-    const { type, subtype, ...props} = card
-    return props
-  })
-  return db('cards').insert(clean).returning('*')
-})
-.then(cards=>{
-  console.log(cards)
-})
+                        let foundSubtypeId = subtypes.find(subtype => subtype.name === cardSubtype)
+                        return foundSubtypeId.id
+                    })
+                    return { ...card, subtype: idArray }
+                 }
+                 else{
+                     return card
+                 }
+            })
+            const clean = cardsWithId.map(card => {
+                const { type, subtype, ...props } = card
+                return props
+            })
+            console.log(clean)
+            return db('cards').insert(clean).returning('*')
+        })
+        .then(dbcards => {
+            myDBCards = dbcards
+            const clean = cardsWithId.map(card => {
+                const { type, multiverseId, ...props } = card
+
+                return { type, multiverseId }
+            })
+            const arrayOfCardsWithTypeAndCardId = clean.map(typeObj => {
+                const cardWithMatchingMultId = dbcards.find(card => card.multiverseId === typeObj.multiverseId)
+                
+                const cardWithTypeArray = { type: typeObj.type, id: cardWithMatchingMultId.id }
+                
+                const cardWithTypeAndCardId = cardWithTypeArray.type.map(type => {
+                    const newObj = { types_id: type, cards_id: cardWithTypeArray.id }
+                    return newObj
+                })
+                return cardWithTypeAndCardId
+            })
+            return db('cards_types').insert(arrayOfCardsWithTypeAndCardId[0]).returning('*')
+        })
+        .then(cardsTypes => {
+            let clean = cardsWithId.filter(ele => {
+                return ele.subtype ? true : false
+            })
+            let newClean = clean.map(card => {
+                const { subtype, multiverseId, ...props } = card
+
+                return { subtype, multiverseId }
+            })
+            const arrayOfCardsWithSubtypeAndCardId = newClean.map(subtypeObj => {
+                const cardWithMatchingMultId = myDBCards.find(card => card.multiverseId === subtypeObj.multiverseId)
+
+                const cardWithSubtypeArray = { subtype: subtypeObj.subtype, id: cardWithMatchingMultId.id }
+    
+                const cardWithSubtypeAndCardId = cardWithSubtypeArray.subtype.map(subtype => {
+                    const newObj = { subtypes_id: subtype, cards_id: cardWithSubtypeArray.id }
+                    return newObj
+                })
+                return cardWithSubtypeAndCardId
+            })
+            return db('cards_subtypes').insert(arrayOfCardsWithSubtypeAndCardId[0]).returning('*')
+        })
+        .then(itdoesntmatter => {
+            const userCards = myDBCards.map(card => {
+                const obj = { cards_id: card.id, users_id: userId }
+                return obj
+            })
+            return db('users_cards').insert(userCards).returning('*')
+        })
 }
 
 module.exports = {

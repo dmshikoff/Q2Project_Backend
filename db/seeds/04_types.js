@@ -8,7 +8,12 @@ exports.seed = function(knex, Promise) {
       // Inserts seed entries
       return knex(TABLE_NAME).insert([
         {id: 1, name: 'Creature'},
-        {id: 2, name: 'Sorcery'}
+        {id: 2, name: 'Sorcery'},
+        {id: 3, name: 'Land'},
+        {id: 4, name: 'Artifact'},
+        {id: 5, name: 'Enchantment'},
+        {id: 6, name: 'Planeswalker'},
+        {id: 7, name: 'Instant'}
       ]);
     })
     .then(() => {

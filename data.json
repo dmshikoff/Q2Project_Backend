@@ -1,0 +1,17 @@
+[
+	{
+		"black":true,
+		"blue":false,
+		"cmc":4,
+		"green":false,
+		"img":"http://gatherer.wizards.com/Handlers/Image.ashxmultiverseid=368535&type=card",
+		"multiverseId":368535,
+		"name":"Sorin, Lord of Innistrad",
+		"red":false,
+		"text":"+1: Create a 1/1 black Vampire creature token with lifelink.↵−2: You get an emblem with 'Creatures you control get +1/+0.'↵−6: Destroy up to three target creatures and/or other planeswalkers. Return each card put into a graveyard this way to the battlefield under your control.",
+        "white":true,
+        "colorless":false,
+        "type": ["Planeswalker", "Creature"],
+        "subtype": ["Sorin"]
+	}
+]

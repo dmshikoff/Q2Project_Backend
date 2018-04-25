@@ -7,9 +7,9 @@ exports.seed = function(knex, Promise) {
     .then(function () {
       // Inserts seed entries
       return knex(TABLE_NAME).insert([
-        {id: 1, username: 'DanielShikoff', password: 'DanielShikoff'},
-        {id: 2, username: 'RachelShikoff', password: 'RachelShikoff'},
-        {id: 3, username: 'SophiaShikoff', password: 'SophiaShikoff'}
+        {id: 1, username: 'DanielShikoff', password: '$2a$10$cHkfsRfdy34Jsy2lt0h.cenUNozgL/vDlO1ulo0X.zFQSSxwJ.DLe'},
+        {id: 2, username: 'RachelShikoff', password: '$2a$10$4T9uAioKDtW0jiE0NMeB1eVqMBvjLlpK5IZxHfCyWf3TJ1onggITG'},
+        {id: 3, username: 'SophiaShikoff', password: '$2a$10$5iEnxxzdCkLWEyVBqdI6eOn/FgybOfuJuHETyRZZ4Okh1luzvRbFG'}
       ]);
     })
     .then(() => {
