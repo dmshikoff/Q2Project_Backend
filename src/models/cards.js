@@ -33,6 +33,30 @@ function getAll(query = {}) {
             .where('name', 'ilike', `%${query.name}%`)
             .where(props)
     }
+    if (query.hasOwnProperty('black')) {
+        return db('cards')
+            .where(query)
+    }
+    if (query.hasOwnProperty('red')) {
+        return db('cards')
+            .where(query)
+    }
+    if (query.hasOwnProperty('green')) {
+        return db('cards')
+            .where(query)
+    }
+    if (query.hasOwnProperty('white')) {
+        return db('cards')
+            .where(query)
+    }
+    if (query.hasOwnProperty('blue')) {
+        return db('cards')
+            .where(query)
+    }
+    if (query.hasOwnProperty('colorless')) {
+        return db('cards')
+            .where(query)
+    }
     else {
         return db(MODEL_NAME)
     }
@@ -56,23 +80,22 @@ function create(cards, userId) {
         .then(function (subtypes) {
             // append array with
             cardsWithId = cardsWithId.map(card => {
-                 if (card.subtype.length !== 0){
+                if (card.subtype.length !== 0) {
                     let idArray = card.subtype.map(cardSubtype => {
 
                         let foundSubtypeId = subtypes.find(subtype => subtype.name === cardSubtype)
                         return foundSubtypeId.id
                     })
                     return { ...card, subtype: idArray }
-                 }
-                 else{
-                     return card
-                 }
+                }
+                else {
+                    return card
+                }
             })
             const clean = cardsWithId.map(card => {
                 const { type, subtype, ...props } = card
                 return props
             })
-            console.log(clean)
             return db('cards').insert(clean).returning('*')
         })
         .then(dbcards => {
@@ -84,9 +107,9 @@ function create(cards, userId) {
             })
             const arrayOfCardsWithTypeAndCardId = clean.map(typeObj => {
                 const cardWithMatchingMultId = dbcards.find(card => card.multiverseId === typeObj.multiverseId)
-                
+
                 const cardWithTypeArray = { type: typeObj.type, id: cardWithMatchingMultId.id }
-                
+
                 const cardWithTypeAndCardId = cardWithTypeArray.type.map(type => {
                     const newObj = { types_id: type, cards_id: cardWithTypeArray.id }
                     return newObj
@@ -108,7 +131,7 @@ function create(cards, userId) {
                 const cardWithMatchingMultId = myDBCards.find(card => card.multiverseId === subtypeObj.multiverseId)
 
                 const cardWithSubtypeArray = { subtype: subtypeObj.subtype, id: cardWithMatchingMultId.id }
-    
+
                 const cardWithSubtypeAndCardId = cardWithSubtypeArray.subtype.map(subtype => {
                     const newObj = { subtypes_id: subtype, cards_id: cardWithSubtypeArray.id }
                     return newObj
@@ -126,7 +149,71 @@ function create(cards, userId) {
         })
 }
 
+function remove(cards, userId) {
+
+    let myDBCards = cards
+    
+    cardId = cards.map( card => {
+        return { id: card.id }
+    })
+    let removedCardsFromCardType;
+    let removedCardsFromCardSubtype;
+    let removedCardsFromUserCards;
+    let removedCardsFromCards;
+
+    return Promise.all(cardId.map(idObj => {
+        return (
+            db('cards_types')
+            .del()
+            .where({ cards_id: idObj.id })
+            .returning('*')
+          )
+    }))
+    .then(data => {
+        return Promise.all(cardId.map(idObj => {
+            return (
+                db('cards_subtypes')
+                .del()
+                .where({ cards_id: idObj.id })
+                .returning('*')
+              )
+        }))
+    })
+    .then(data => {
+        return Promise.all(cardId.map(idObj => {
+            return (
+                db('cards_decks')
+                .del()
+                .where({ cards_id: idObj.id })
+                .returning('*')
+              )
+        }))
+    })
+    .then(data => {
+        return Promise.all(cardId.map(idObj => {
+            return (
+                db('users_cards')
+                .del()
+                .where({ cards_id: idObj.id })
+                .returning('*')
+              )
+        }))
+    })
+    .then(data => {
+        return Promise.all(cardId.map(idObj => {
+            return (
+                db('cards')
+                .del()
+                .where({ id: idObj.id })
+                .returning('*')
+              )
+        }))
+    })
+}
+
+
 module.exports = {
     getAll,
-    create
+    create,
+    remove
 }

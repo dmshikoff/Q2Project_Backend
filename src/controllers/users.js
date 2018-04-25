@@ -38,6 +38,15 @@ function createCards(req, res, next) {
     .catch(next)
 }
 
+function removeCards(req, res, next) {
+
+  cardsModel.remove(req.body, req.params.userId)
+    .then(data => {
+      res.status(200).send({data})
+    })
+    .catch(next)
+}
+
 //////////////////////////////////////////////////////////////////////////////
 // Quality of Life functions
 //////////////////////////////////////////////////////////////////////////////
@@ -45,5 +54,6 @@ function createCards(req, res, next) {
 module.exports = {
   createUser,
   getAllCards,
-  createCards
+  createCards,
+  removeCards
 }
