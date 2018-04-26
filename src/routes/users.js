@@ -7,6 +7,7 @@ const userController = require('../controllers/users')
 //////////////////////////////////////////////////////////////////////////////
 
 router.post('/', userController.createUser)
+router.get('/:userId', userController.getOneUser)
 router.post('/:userId/someCards', userController.getSomeCards)
 router.post('/:userId/cards', userController.createCards)
 router.get('/:userId/cards', userController.getAllCards)

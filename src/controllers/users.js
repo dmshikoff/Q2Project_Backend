@@ -101,6 +101,14 @@ function getAllCardsFromDeck(req, res, next){
   .catch(next)
 }
 
+function getOneUser(req, res, next){
+  userModel.getOneUser(req.params.userId)
+  .then(data => {
+    res.status(200).send({data})
+  })
+  .catch(next)
+}
+
 //////////////////////////////////////////////////////////////////////////////
 // Quality of Life functions
 //////////////////////////////////////////////////////////////////////////////
@@ -115,5 +123,6 @@ module.exports = {
   getOneDeck,
   getSomeCards,
   addCardsToDeck,
-  getAllCardsFromDeck
+  getAllCardsFromDeck,
+  getOneUser
 }

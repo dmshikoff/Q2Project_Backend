@@ -54,7 +54,7 @@ function create(username, password){
 
 function createDeck(body, userId){
   const newObj = {name: body, users_id: userId}
-  return db('decks').insert(newObj).returning('*')
+  return db('decks').insert(newObj).returning('*').then(([data])=>data)
 }
 
 function getDecks(userId){
@@ -107,7 +107,9 @@ function getAllCardsFromDeck(userId, deckId){
   })
 }
 
-
+function getOneUser(userId){
+  return db('users').where({id: userId}).returning('*')
+}
 
 module.exports = {
   getOneByUserName,
@@ -117,5 +119,6 @@ module.exports = {
   getOneDeck,
   getSomeCards,
   addCardsToDeck,
-  getAllCardsFromDeck
+  getAllCardsFromDeck,
+  getOneUser
 }
