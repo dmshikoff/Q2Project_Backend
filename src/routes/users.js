@@ -7,14 +7,15 @@ const userController = require('../controllers/users')
 //////////////////////////////////////////////////////////////////////////////
 
 router.post('/', userController.createUser)
-router.post('/:userId/cards', userController.getSomeCards)
-router.get('/:userId/cards', userController.getAllCards)
+router.post('/:userId/someCards', userController.getSomeCards)
 router.post('/:userId/cards', userController.createCards)
+router.get('/:userId/cards', userController.getAllCards)
 router.delete('/:userId/cards', userController.removeCards)
 router.post('/:userId/decks', userController.createDeck)
 router.get('/:userId/decks', userController.getDecks)
 router.get('/:userId/decks/:decksId', userController.getOneDeck)
-router.post('/:userId/decks/:decksId', userController.addCardsToDeck)
+router.get('/:userId/decks/:decksId/cards', userController.getAllCardsFromDeck)
+router.post('/:userId/decks/:decksId/cards', userController.addCardsToDeck)
 
 
 module.exports = router
