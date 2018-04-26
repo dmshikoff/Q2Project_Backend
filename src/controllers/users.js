@@ -1,6 +1,7 @@
 const userModel = require('../models/users')
 const cardsModel = require('../models/cards')
 
+
 //////////////////////////////////////////////////////////////////////////////
 // Basic CRUD Methods
 //////////////////////////////////////////////////////////////////////////////
@@ -47,6 +48,33 @@ function removeCards(req, res, next) {
     .catch(next)
 }
 
+function createDeck(req, res, next) {
+
+  userModel.createDeck(req.body.name, req.params.userId)
+  .then(data => {
+    res.status(200).send({data})
+  })
+  .catch(next)
+}
+
+function getDecks(req, res, next){
+
+  userModel.getDecks(req.params.userId)
+  .then(data => {
+    res.status(200).send({data})
+  })
+  .catch(next)
+}
+
+function addCardsToDeck(req, res, next) {
+
+  userModel.addCardsToDeck(req.body, req.params.deckId, req.params.userId)
+  .then(data => {
+    res.status(200).send({data})
+  })
+  .catch(next)
+}
+
 //////////////////////////////////////////////////////////////////////////////
 // Quality of Life functions
 //////////////////////////////////////////////////////////////////////////////
@@ -55,5 +83,8 @@ module.exports = {
   createUser,
   getAllCards,
   createCards,
-  removeCards
+  removeCards,
+  createDeck,
+  getDecks,
+  addCardsToDeck
 }
