@@ -61,9 +61,30 @@ function getDecks(userId){
   return db('decks').where({ users_id : userId}).returning('*')
 }
 
-function addCardsToDeck(body, userId, deckId){
+function getOneDeck(userId, deckId){
+  return db('decks').where({ users_id: userId, id: deckId }).returning('*')
+}
 
-  return db('cards_decks').insert().returning('*')
+function addCardsToDeck(body, userId, deckId){
+  const cardIdArray = body.map(ele => {
+    let cardId = { decks_id: Number(deckId), cards_id : ele.id }
+    return cardId
+  })
+  
+  return db('cards_decks').insert(cardIdArray).returning('*')
+}
+
+function getSomeCards(body, userId){
+
+  const cardsIdArray = body.map(ele => {
+   const cardId =  ele.cards_id
+   return cardId
+  })
+
+  return Promise.All(cardsIdArray.map(ele => {
+    return db('cards').where(id = ele).returning('*')
+  }))
+  .then(console.log)
 }
 
 
@@ -72,5 +93,7 @@ module.exports = {
   create,
   createDeck,
   getDecks,
+  getOneDeck,
+  getSomeCards,
   addCardsToDeck
 }

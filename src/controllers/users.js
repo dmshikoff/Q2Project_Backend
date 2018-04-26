@@ -66,9 +66,27 @@ function getDecks(req, res, next){
   .catch(next)
 }
 
+function getOneDeck(req, res, next){
+
+  userModel.getOneDeck(req.params.userId, req.params.decksId)
+  .then(data => {
+    res.status(200).send({data})
+  })
+  .catch(next)
+}
+
 function addCardsToDeck(req, res, next) {
 
   userModel.addCardsToDeck(req.body, req.params.deckId, req.params.userId)
+  .then(data => {
+    res.status(200).send({data})
+  })
+  .catch(next)
+}
+
+function getSomeCards(req, res, next){
+
+  userModel.getSomeCards(req.body, req.params.userId)
   .then(data => {
     res.status(200).send({data})
   })
@@ -86,5 +104,7 @@ module.exports = {
   removeCards,
   createDeck,
   getDecks,
+  getOneDeck,
+  getSomeCards,
   addCardsToDeck
 }

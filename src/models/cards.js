@@ -200,6 +200,7 @@ function remove(cards, userId) {
         }))
     })
     .then(data => {
+        //THIS IS WHERE YOU LEFT OFF!! PROMISE.ALL APPARENTLY IS NOT A FUNCTION HERE AND IS CAUSING ISSUES!!!!
         return Promise.all(cardId.map(idObj => {
             return (
                 db('cards')
