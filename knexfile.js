@@ -9,7 +9,7 @@ module.exports = {
       directory: path.join(__dirname, 'db', 'migrations')
     },
     seeds: {
-      directory: path.join(__dirname, 'db', 'seeds')
+      directory: path.join(__dirname, 'db', 'seeds', 'development') // /Users/daniel/galvanize/.../db/seeds
     }
   },
 
@@ -32,7 +32,7 @@ module.exports = {
       directory: path.join(__dirname, 'db', 'migrations')
     },
     seeds: {
-      directory: path.join(__dirname, 'db', 'seeds')
+      directory: path.join(__dirname, 'db', 'seeds', 'production')
     }
   }
 };
