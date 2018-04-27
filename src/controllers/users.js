@@ -23,7 +23,7 @@ function createUser(req, res, next) {
 }
 
 function getAllCards(req, res, next) {
-  cardsModel.getAll(req.query)
+  cardsModel.getAll(req.query, req.params.userId)
     .then(data => {
       res.status(200).send(data)
     })
@@ -76,8 +76,7 @@ function getOneDeck(req, res, next){
 }
 
 function addCardsToDeck(req, res, next) {
-
-  userModel.addCardsToDeck(req.body, req.params.deckId, req.params.userId)
+  userModel.addCardsToDeck(req.body, req.params.decksId, req.params.userId)
   .then(data => {
     res.status(200).send({data})
   })

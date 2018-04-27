@@ -65,12 +65,14 @@ function getOneDeck(userId, deckId){
   return db('decks').where({ users_id: userId, id: deckId }).returning('*')
 }
 
-function addCardsToDeck(body, userId, deckId){
+function addCardsToDeck(body, deckId, userId){
+  console.log(body)
+
   const cardIdArray = body.map(ele => {
-    let cardId = { decks_id: Number(deckId), cards_id : ele.id }
+    let cardId = { decks_id: parseInt(deckId), cards_id : ele.id }
     return cardId
   })
-  
+  console.log(cardIdArray)
   return db('cards_decks').insert(cardIdArray).returning('*')
 }
 

@@ -2,63 +2,96 @@ const db = require('../../db')
 const MODEL_NAME = 'cards'
 
 
-function getAll(query = {}) {
+function getAll(query = {}, userId) {
     if (query.hasOwnProperty('type')) {
         const { type, ...props } = query
         return db('types')
+            .select(db.raw('cards.*'))
             .select('types.name', 'cards.img')
             .join('cards_types', 'cards_types.types_id', 'types.id')
             .join('cards', 'cards.id', 'cards_types.cards_id')
+            .join('users_cards', 'users_cards.cards_id', 'cards.id')
             .where("types.name", 'ilike', `%${type}%`)
+            .where('users_cards.users_id', userId)
             .where(props)
     }
     if (query.hasOwnProperty('subtype')) {
         const { subtype, ...props } = query
         return db('subtypes')
+            .select(db.raw('cards.*'))
             .select('subtypes.name', 'cards.img')
             .join('cards_subtypes', 'cards_subtypes.subtypes_id', 'subtypes.id')
             .join('cards', 'cards.id', 'cards_subtypes.cards_id')
+            .join('users_cards', 'users_cards.cards_id', 'cards.id')
             .where("subtypes.name", 'ilike', `%${subtype}%`)
+            .where('users_cards.users_id', userId)
             .where(props)
     }
     if (query.hasOwnProperty('text')) {
         const { text, ...props } = query
         return db('cards')
+            .select(db.raw('cards.*'))
+            .join('users_cards', 'users_cards.cards_id', 'cards.id')
             .where('text', 'ilike', `%${query.text}%`)
+            .where('users_cards.users_id', userId)
             .where(props)
     }
     if (query.hasOwnProperty('name')) {
         const { name, ...props } = query
         return db('cards')
+            .select(db.raw('cards.*'))
+            .join('users_cards', 'users_cards.cards_id', 'cards.id')
             .where('name', 'ilike', `%${query.name}%`)
+            .where('users_cards.users_id', userId)
             .where(props)
     }
     if (query.hasOwnProperty('black')) {
         return db('cards')
+            .select(db.raw('cards.*'))
+            .join('users_cards', 'users_cards.cards_id', 'cards.id')
+            .where('users_cards.users_id', userId)
             .where(query)
     }
     if (query.hasOwnProperty('red')) {
         return db('cards')
+            .select(db.raw('cards.*'))
+            .join('users_cards', 'users_cards.cards_id', 'cards.id')
+            .where('users_cards.users_id', userId)
             .where(query)
     }
     if (query.hasOwnProperty('green')) {
         return db('cards')
+            .select(db.raw('cards.*'))
+            .join('users_cards', 'users_cards.cards_id', 'cards.id')
+            .where('users_cards.users_id', userId)
             .where(query)
     }
     if (query.hasOwnProperty('white')) {
         return db('cards')
+            .select(db.raw('cards.*'))
+            .join('users_cards', 'users_cards.cards_id', 'cards.id')
+            .where('users_cards.users_id', userId)
             .where(query)
     }
     if (query.hasOwnProperty('blue')) {
         return db('cards')
+            .select(db.raw('cards.*'))
+            .join('users_cards', 'users_cards.cards_id', 'cards.id')
+            .where('users_cards.users_id', userId)
             .where(query)
     }
     if (query.hasOwnProperty('colorless')) {
         return db('cards')
+            .select(db.raw('cards.*'))
+            .join('users_cards', 'users_cards.cards_id', 'cards.id')
+            .where('users_cards.users_id', userId)
             .where(query)
     }
     else {
-        return db(MODEL_NAME)
+        return db('cards')
+            .select(db.raw('cards.*'))
+            .join('users_cards', 'users_cards.cards_id', 'cards.id')
+            .where('users_cards.users_id', userId)
     }
 }
 
