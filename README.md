@@ -18,6 +18,9 @@
 * Run the development task: `npm run dev`
     * Starts a server running at http://localhost:3000
     * Automatically restarts when any of your files change
+* Create a database, this can be done with any name: `createdb DATABASE_NAME`. By default, the database name is set to "q2", but can be altered in the `.env` file 
+* Migrate the database: `npm run knex migrate:latest`
+* Seed the database: `npm run knex seed:run`
 
 ## Databases
 
