@@ -1,4 +1,4 @@
-# Q2Project_Backend
+# MTG Assistant Backend
 
 ## Getting started
 
